@@ -29,9 +29,7 @@ def get_rank(name, url):
     for pat in a:
         href = pat['href']
         avnum_list.append(href[href.index('av') + 2:href.rindex('/')])
-    avnum_list = {str(rank): avnum for rank, avnum in zip(range(1, len(avnum_list) + 1), avnum_list)}
-    avnum_list["datetime"] = datetime.datetime.today()
-    avnum_list["type"] = name
+    avnum_list = {"rank": [avnum for avnum in avnum_list], "datetime": datetime.datetime.today(), "type": name}
     try:
         print(avnum_list)
         collection.insert_one(avnum_list)
