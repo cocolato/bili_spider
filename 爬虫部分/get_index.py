@@ -68,7 +68,7 @@ class BaiduIndex:
                 self._params_queue.put(params_data)
             except queue.Empty:
                 break
-            self._sleep_func()
+            # self._sleep_func()
 
     def _init_queue(self, start_date, end_date, keywords):
         """

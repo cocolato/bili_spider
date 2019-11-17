@@ -28,7 +28,7 @@ def get_rank(name, url):
     avnum_list = []
     for pat in a:
         href = pat['href']
-        avnum_list.append(href[href.index('av') + 2:href.rindex('/')])
+        avnum_list.append(href[href.index('av') + 2:])
     avnum_list = {"rank": [avnum for avnum in avnum_list], "datetime": datetime.datetime.today(), "type": name}
     try:
         print(avnum_list)
