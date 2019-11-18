@@ -33,6 +33,7 @@ def get_task_list(year, month, day):
     return [do_find(year, month, day, _type) for _type in url_dic.keys()]
 
 
+# 爬取视频关键字
 def get_keywords(av_num):
     req = requests.get(url_head + str(av_num), headers=head)
     status = req.status_code
@@ -69,16 +70,10 @@ def fetch(url):
                 print("status_code error: {}".format(status))
 
 
-
-
-
 if __name__ == '__main__':
     task_list = get_task_list(2019, 10, 29)
     for task in task_list[0:1]:
         for url in task:
             fetch(url)
             time.sleep(0.5)
-
-
-
 
