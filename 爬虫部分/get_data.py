@@ -4,16 +4,17 @@ import time
 import requests
 import datetime
 import math
+from get_comment import get_hot_comments
 from get_index import BaiduIndex
 
 
 head = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 \
          (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/16.16299'}
 url_dic = {
-    'day_all': 'https://www.bilibili.com/ranking/all/0/0/1',
+    # 'day_all': 'https://www.bilibili.com/ranking/all/0/0/1',
     'day_origin': 'https://www.bilibili.com/ranking/origin/0/0/1',
-    'day_cinema': 'https://www.bilibili.com/ranking/cinema/177/0/1',
-    'day_rookie': 'https://www.bilibili.com/ranking/rookie/0/0/1',
+    # 'day_cinema': 'https://www.bilibili.com/ranking/cinema/177/0/1',
+    # 'day_rookie': 'https://www.bilibili.com/ranking/rookie/0/0/1',
 }
 url_head = "https://www.bilibili.com/video/av"
 json_url_head = 'https://api.bilibili.com/x/web-interface/archive/stat?aid='
@@ -62,6 +63,8 @@ def fetch(url):
                     baidu_index = [int(index["index"]) for index in baidu_index]
                     index_mean = sum(baidu_index) // len(baidu_index)
                     json_data['data']['index'] = index_mean
+                    hot_comments = get_hot_comments(av_num)
+                    json_data['data']['hot_comments'] = hot_comments
                     print(json_data['data'])
                     data_dbs[av_num].insert_one(json_data['data'])
                 except Exception as e:
@@ -70,10 +73,10 @@ def fetch(url):
                 print("status_code error: {}".format(status))
 
 
-if __name__ == '__main__':
-    task_list = get_task_list(2019, 10, 29)
+def get_data_run(year, month, day):
+    task_list = get_task_list(year, month, day)
     for task in task_list[0:1]:
         for url in task:
             fetch(url)
-            time.sleep(0.5)
+            time.sleep(0.3)
 
