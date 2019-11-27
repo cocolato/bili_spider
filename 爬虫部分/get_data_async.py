@@ -15,9 +15,9 @@ url_dic = {
 json_url = 'https://api.bilibili.com/x/web-interface/archive/stat?aid='
 
 client = AsyncIOMotorClient('mongodb://localhost:27017')
-dbs = client.video
-collection = dbs.avnum_rank
-data_dbs = client.videodata
+dbs = client['video']
+collection = dbs['avnum_rank']
+data_dbs = client['videodata']
 
 
 async def do_find(year, month, day, _type):

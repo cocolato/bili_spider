@@ -17,8 +17,8 @@ url_dic = {
 comment_url_head = url = "http://api.bilibili.com/x/reply?type=1&oid="
 
 client = MongoClient('mongodb://localhost:27017')
-comment_dbs = client.videoComment
-avnum_ranl_collection = client.video.avnum_rank
+comment_dbs = client['videoComment']
+avnum_ranl_collection = client['video']['avnum_rank']
 
 
 def do_find(year, month, day, _type):

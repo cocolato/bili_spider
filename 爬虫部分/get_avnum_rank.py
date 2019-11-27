@@ -15,8 +15,8 @@ url_dic = {
 }
 
 client = AsyncIOMotorClient('mongodb://localhost:27017')
-dbs = client.video
-collection = dbs.avnum_rank
+dbs = client['video']
+collection = dbs['avnum_rank']
 
 
 def get_rank(name, url):

@@ -20,9 +20,9 @@ url_head = "https://www.bilibili.com/video/av"
 json_url_head = 'https://api.bilibili.com/x/web-interface/archive/stat?aid='
 
 client = MongoClient('mongodb://localhost:27017')
-dbs = client.video
-collection = dbs.avnum_rank
-data_dbs = client.newVideoData
+dbs = client['video']
+collection = dbs['avnum_rank']
+data_dbs = client['newVideoData']
 
 
 def do_find(year, month, day, _type):
