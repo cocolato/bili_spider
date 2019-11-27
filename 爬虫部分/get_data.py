@@ -78,5 +78,5 @@ def get_data_run(year, month, day):
     for task in task_list[0:1]:
         for url in task:
             fetch(url)
-            time.sleep(0.3)
+            time.sleep(1)
 
