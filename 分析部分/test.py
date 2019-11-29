@@ -7,45 +7,28 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM, GRU
 from RNN_model import RNN
-
-
-def build_model():
-    model = Sequential()
-    model.add(GRU(units=4, input_shape=(1, 1)))
-    model.add(Dense(units=1))
-    model.compile(loss='mean_squared_error', optimizer='adam')
-    return model
-
-
-seed = 7
-batch_size = 1
-epochs = 10
-filename = 'international-airline-passengers.csv'
-footer = 3
-look_back = 1
-
-
-def create_dataset(dataset):
-    dataX, dataY = [], []
-    for i in range(len(dataset) - look_back - 1):
-        x = dataset[i: i + look_back, 0]
-        dataX.append(x)
-        y = dataset[i + look_back, 0]
-        dataY.append(y)
-        # print('X: %s, Y: %s' % (x, y))
-    return np.array(dataX), np.array(dataY)
+import matplotlib.pyplot as plt
 
 
 client = MongoClient('mongodb://localhost:27017')
 dbs = client['videodata']
-p = Processor(dbs['53766576'])
-score = p.get_score()
-array = p.get_array()
+p = Processor(dbs['53893728'])
 incre = p.get_increment()
 dataset = p.run_pca()[:, 0]
-gru_model = RNN(dataset=dataset, input_shape=(1, 1))
+gru_model = RNN(dataset=dataset, rnn_type="GRU", input_shape=(1, 1))
 gru_model.normalize()
-print(gru_model.create_train_data(train_prop=0.67))
+x_train, y_train, x_validation, y_validation, train_size, validation_size = gru_model.create_train_data(train_prop=0.67)
+gru_model.fit(x_train, y_train, epochs=3)
+predict_train = gru_model.predict(x_train)
+predict_validation = gru_model.predict(x_validation)
+predict_train, y_train = gru_model.anti_normalize(predict_train, y_train)
+predict_validation, y_validation = gru_model.anti_normalize(predict_validation, y_validation)
+gru_model.evaluate(predict_train, y_train)
+gru_model.evaluate(predict_validation, y_validation)
+gru_model.plot(predict_train, predict_validation)
+
+
+
 
 # print(dataset)
 # dataset = dataset.reshape(-1, 1)

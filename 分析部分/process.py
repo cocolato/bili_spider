@@ -37,7 +37,7 @@ class Processor(object):
         return True if self._collection.find_one() is None else False
 
     def _to_numpy(self):
-        data = list(self._collection.find({}, {'_id': 0, 'aid': 0, 'datetime': 0}).sort("datetime"))
+        data = list(self._collection.find({}, {'_id': 0, 'aid': 0, 'datetime': 0}).sort("datetime"))[:7700]
         return np.asarray([list(record.values()) for record in data])
 
     def get_array(self):
