@@ -5,7 +5,7 @@ from pylab import mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import math
-from keras.models import Sequential
+from keras.models import Sequential, load_model
 from keras.layers import Dense
 from keras.layers import LSTM, GRU
 
@@ -88,13 +88,22 @@ class RNN(object):
         predict_validation_plot[len(predict_train) + self.look_back * 2 + 1:len(self.dataset) - 1, :] \
             = predict_validation
         dataset = self.scaler.inverse_transform(self.dataset)
-        plt.figure(figsize=(24, 10), dpi=80)
-        plt.xlabel("采样点")
-        plt.ylabel("热度指数")
-        plt.plot(dataset, color='blue', label="原始数据")
-        plt.plot(predict_train_plot, color='green', label="训练集拟合数据")
-        plt.plot(predict_validation_plot, color='red', label="测试集拟合数据")
-        plt.legend("upper right")
+        plt.figure(figsize=(24, 8), dpi=120)
+        plt.xlabel("采样点", fontsize=20)
+        plt.ylabel("热度指数", fontsize=20)
+        plt.xticks(fontsize=20)
+        plt.yticks(fontsize=20)
+        l1, = plt.plot(dataset, color='blue', label="原始数据")
+        l2, = plt.plot(predict_train_plot, color='green', label="训练集拟合数据")
+        l3, = plt.plot(predict_validation_plot, color='red', label="测试集拟合数据")
+        plt.legend(loc="upper right", handles=[l1, l2, l3], labels=['原始数据', '训练集拟合数据', "测试集拟合数据"], fontsize=20)
+
         plt.show()
+
+    def save(self, model_name):
+        self.model.save(model_name)
+
+    def load_model(self, model_name):
+        self.model = load_model(model_name)
 
 

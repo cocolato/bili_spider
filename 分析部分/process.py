@@ -9,7 +9,11 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM, GRU
 from pymongo.collection import Collection
+from pylab import mpl
 
+
+mpl.rcParams['font.sans-serif'] = ['SimHei']
+mpl.rcParams['axes.unicode_minus'] = False
 item_dic = {
     "分享数": 0,
     "投币数": 1,
@@ -72,3 +76,11 @@ class Processor(object):
 
     def run_kernel_pca(self):
         pass
+
+    def show_data(self, item="播放量"):
+        data = self._array[item_dic[item]]
+        plt.plot(data, color='blue')
+        plt.xlabel("采样点", fontsize=30)
+        plt.ylabel(item, fontsize=30)
+        plt.show()
+
