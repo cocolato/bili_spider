@@ -111,12 +111,16 @@ class VideoDataGetter(requests.Session):
             return sum(result) // len(result)
 
 
+def get_data_run(year, month, day):
+    task_list = get_task_list(year, month, day)
+    getter = VideoDataGetter(task_list)
+    start = time.time()
+    getter.get_detail()
+    print(time.time() - start)
+
+
+
+
 
 if __name__ == '__main__':
-    task_list = get_task_list(2019, 11, 19)
-    getter = VideoDataGetter(task_list)
-    while True:
-        start = time.time()
-        getter.get_detail()
-        print(time.time()-start)
-        time.sleep(10)
+    get_data_run(2019, 11, 19)
