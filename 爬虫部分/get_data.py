@@ -25,7 +25,7 @@ class VideoDataGetter(requests.Session):
         self.headers.update(head)
 
     def get_keywords(self, video_id):
-        req = self.get(video_detail_page_url+str(video_id))
+        req = self.get(video_detail_page_url + str(video_id))
         if req.status_code in [200, 201]:
             req.encoding = 'utf-8'
             soup = BeautifulSoup(req.text, 'lxml')
@@ -36,7 +36,7 @@ class VideoDataGetter(requests.Session):
             return []
 
     def get_comments(self, video_id):
-        req = self.get(video_comment_url+str(video_id))
+        req = self.get(video_comment_url + str(video_id))
         if req.status_code in [200, 201]:
             json_data = req.json()
             if json_data['message'] == '0':
@@ -57,7 +57,7 @@ class VideoDataGetter(requests.Session):
                 if req.json()['message'] == '0':
                     video_data = req.json()['data']
                 else:
-                    video_data = {'aid': url[url.find('=')+1:]}
+                    video_data = {'aid': url[url.find('=') + 1:]}
                     print(f"视频数据json返回发生错误，错误详情: {req.json()['message']}")
             else:
                 print(f"请求视频数据网页错误，状态码{req.status_code}.")
@@ -92,7 +92,7 @@ class VideoDataGetter(requests.Session):
         result = []
         for keyword in keywords:
             req = self.get(f"http://index.baidu.com/api/LiveApi/getLive?region=0&word={keyword}")
-            if req.status_code in [200, 201]:
+            try:
                 if req.json()["status"] == 0:
                     data = req.json()["data"]
                     all_data = data["result"][0]["index"][0]["_all"]
@@ -101,6 +101,8 @@ class VideoDataGetter(requests.Session):
                     result.append(int(self.decrypt(ptbk, all_data).split(',')[-1]))
                 else:
                     result.append(0)
+            except Exception as e:
+                result.append(0)
             else:
                 print(f"请求百度指数网页错误，状态码{req.status_code}.")
                 result.append(0)
@@ -117,9 +119,6 @@ def get_data_run(year, month, day):
     start = time.time()
     getter.get_detail()
     print(time.time() - start)
-
-
-
 
 
 if __name__ == '__main__':
