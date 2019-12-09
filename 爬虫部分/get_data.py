@@ -135,7 +135,6 @@ class VideoDataGetter(requests.Session):
             except Exception as e:
                 raise GetError(e)
             if req.status_code in [200, 201]:
-                print(req.json())
                 try:
                     if req.json()["status"] == 0:
                         data = req.json()["data"]
