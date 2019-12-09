@@ -3,7 +3,7 @@ import datetime
 import time
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
-from config import url_dic, video_detail_page_url, user_agent, COOKIES,\
+from config import url_dic, video_detail_page_url, user_agent, rank, COOKIES,\
     video_data_page_url, video_rank, video_data_dbs, proxy, video_comment_url
 from random import choice
 
@@ -64,6 +64,8 @@ class VideoDataGetter(requests.Session):
             json_data = req.json()
             if json_data['message'] == '0':
                 comments = json_data["data"]["hots"]
+                if comments is None:
+                    return []
                 comments = [comment["content"]["message"] for comment in comments]
                 return comments
             else:
@@ -93,7 +95,7 @@ class VideoDataGetter(requests.Session):
         try:
             video_data['keywords'] = self.get_keywords(aid)
             video_data['comments'] = self.get_comments(aid)
-            video_data['index'] = self.get_baidu_live_index(video_data['keywords'])
+            # video_data['index'] = self.get_baidu_live_index(video_data['keywords'])
             video_data['datetime'] = datetime.datetime.now()
             # print(video_data)
             print(f"{aid} Complete!")
@@ -101,14 +103,14 @@ class VideoDataGetter(requests.Session):
             print(f"视频{aid}爬取过程出错，错误信息: {e}.")
             video_data['keywords'] = "None"
             video_data['comments'] = "None"
-            video_data['index'] = "None"
+            # video_data['index'] = "None"
             video_data['datetime'] = "None"
 
         try:
             video_data_dbs[str(aid)].insert_one(video_data)
         except Exception as e:
             print(f"视频{aid}存入数据库过程发生错误，错误信息：{e}")
-        time.sleep(1)
+        time.sleep(2)
 
     @staticmethod
     def decrypt(t: str, e: str) -> str:
@@ -159,7 +161,7 @@ class VideoDataGetter(requests.Session):
 if __name__ == '__main__':
     while True:
         start = time.time()
-        task_list = get_task_list(2019, 12, 9)
+        task_list = [video_data_page_url+str(aid) for l in list(rank.values()) for aid in l]
         for task in task_list:
             getter = VideoDataGetter(task)
             getter.get_detail()
