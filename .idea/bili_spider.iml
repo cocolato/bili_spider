@@ -6,7 +6,7 @@
       <excludeFolder url="file://$MODULE_DIR$/爬虫部分" />
       <excludeFolder url="file://$MODULE_DIR$/爬虫部分/百度指数爬虫" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.6" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.7 (bili_spider)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TestRunnerService">
