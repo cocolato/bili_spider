@@ -9,15 +9,16 @@ from random import choice
 
 
 def user_agent_factory():
-    head = {
+    headers = {
         'Accept': 'application/json, text/plain, */*',
         'Accept-Encoding': 'gzip, deflate',
         'Accept-Language': 'zh-CN,zh;q=0.9',
-        'Cache-Control': 'no-cache',
         'Cookie': COOKIES,
+        'DNT': '1',
+        'Pragma': 'no-cache',
         'User-Agent': choice(user_agent)
     }
-    return head
+    return headers
 
 
 def do_find(year, month, day, _type):
@@ -134,6 +135,7 @@ class VideoDataGetter(requests.Session):
             except Exception as e:
                 raise GetError(e)
             if req.status_code in [200, 201]:
+                print(req.json())
                 try:
                     if req.json()["status"] == 0:
                         data = req.json()["data"]
@@ -158,7 +160,7 @@ class VideoDataGetter(requests.Session):
 if __name__ == '__main__':
     while True:
         start = time.time()
-        task_list = get_task_list(2019, 11, 19)
+        task_list = get_task_list(2019, 12, 9)
         for task in task_list:
             getter = VideoDataGetter(task)
             getter.get_detail()
