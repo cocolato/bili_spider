@@ -4,7 +4,7 @@ import time
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
 from config import url_dic, video_detail_page_url, user_agent, rank, COOKIES,\
-    video_data_page_url, video_rank, video_data_dbs, proxy, video_comment_url
+    video_data_page_url, video_rank, low_video_data_dbs, high_video_data_dbs, proxy, video_comment_url
 from random import choice
 
 
@@ -36,8 +36,9 @@ class GetError(Exception):
 
 class VideoDataGetter(requests.Session):
 
-    def __init__(self, url):
+    def __init__(self, url, dbs):
         super(VideoDataGetter, self).__init__()
+        self.__database = dbs
         self._url = url
         self.headers.update(user_agent_factory())
 
@@ -107,7 +108,7 @@ class VideoDataGetter(requests.Session):
             video_data['datetime'] = "None"
 
         try:
-            video_data_dbs[str(aid)].insert_one(video_data)
+            self.__database[str(aid)].insert_one(video_data)
         except Exception as e:
             print(f"视频{aid}存入数据库过程发生错误，错误信息：{e}")
         time.sleep(2)
@@ -163,7 +164,7 @@ if __name__ == '__main__':
         start = time.time()
         task_list = [video_data_page_url+str(aid) for l in list(rank.values()) for aid in l]
         for task in task_list:
-            getter = VideoDataGetter(task)
+            getter = VideoDataGetter(task, low_video_data_dbs)
             getter.get_detail()
         print(time.time() - start)
         time.sleep(5)

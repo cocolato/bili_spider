@@ -47,7 +47,7 @@ user_agent = [
     "Openwave/ UCWEB7.0.2.37/28/999",
     "Mozilla/4.0 (compatible; MSIE 6.0; ) Opera/UCWEB7.0.2.37/28/999",
     # iPhone 6：
-	"Mozilla/6.0 (iPhone; CPU iPhone OS 8_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/8.0 Mobile/10A5376e Safari/8536.25",
+    "Mozilla/6.0 (iPhone; CPU iPhone OS 8_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/8.0 Mobile/10A5376e Safari/8536.25",
 
 ]
 
@@ -56,7 +56,8 @@ video_data_page_url = 'https://api.bilibili.com/x/web-interface/archive/stat?aid
 video_comment_url = "http://api.bilibili.com/x/reply?type=1&oid="
 client = MongoClient("mongodb://localhost:27017")
 video_rank = client["video"]['avnum_rank']
-video_data_dbs = client["newVideoData"]
+low_video_data_dbs = client["LowVideoData"]
+high_video_data_dbs = client["HighVideoData"]
 
 proxy = ["116.62.221.139:3128", "219.239.142.253:3128", "148.70.158.7:8080",
          "101.4.136.34:80", "116.62.240.1:3128", "119.41.236.180:8010", "116.62.234.0:3128", "116.62.189.215:3128"]
@@ -82,3 +83,12 @@ rank = {
     "娱乐热门": [78593507, 78608417, 78582349, 78593748, 78584396],
     "全站日排行": [78530758, 78622872, 78595977, 78593791, 78553445]
 }
+
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko/20100101 Firefox/4.0.1",
+}
+
+video_type = [0, 1, 3, 4, 5, 11, 12, 13, 16, 17, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 36, 37, 39,
+              41, 43, 46, 47, 50, 51, 53, 54, 56, 59, 60, 63, 65, 67, 71, 74, 75, 76, 77, 79, 80, 82, 83, 85, 86, 94,
+              95, 96, 98, 114, 116, 118, 119, 120, 121, 122, 124, 125, 126, 127, 128, 129, 130, 131, 132, 134, 135, 136,
+              137, 138, 139, 140, 141, 142, 143, 145, 146, 147]
